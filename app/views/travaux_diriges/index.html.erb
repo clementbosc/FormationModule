@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Travaux Diriges</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Number</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @travaux_diriges.each do |travaux_dirige| %>
+      <tr>
+        <td><%= travaux_dirige.name %></td>
+        <td><%= travaux_dirige.number %></td>
+        <td><%= link_to 'Show', travaux_dirige %></td>
+        <td><%= link_to 'Edit', edit_travaux_dirige_path(travaux_dirige) %></td>
+        <td><%= link_to 'Destroy', travaux_dirige, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Travaux dirige', new_travaux_dirige_path %>

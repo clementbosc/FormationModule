@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @travaux_dirige.name %>
+</p>
+
+<p>
+  <strong>Number:</strong>
+  <%= @travaux_dirige.number %>
+</p>
+
+<%= link_to 'Edit', edit_travaux_dirige_path(@travaux_dirige) %> |
+<%= link_to 'Back', travaux_diriges_path %>

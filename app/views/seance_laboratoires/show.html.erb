@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @seance_laboratoire.name %>
+</p>
+
+<p>
+  <strong>Number:</strong>
+  <%= @seance_laboratoire.number %>
+</p>
+
+<%= link_to 'Edit', edit_seance_laboratoire_path(@seance_laboratoire) %> |
+<%= link_to 'Back', seance_laboratoires_path %>

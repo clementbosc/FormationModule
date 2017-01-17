@@ -1,0 +1,1 @@
+json.partial! "seance_laboratoires/seance_laboratoire", seance_laboratoire: @seance_laboratoire

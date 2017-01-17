@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Seance Laboratoires</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Number</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @seance_laboratoires.each do |seance_laboratoire| %>
+      <tr>
+        <td><%= seance_laboratoire.name %></td>
+        <td><%= seance_laboratoire.number %></td>
+        <td><%= link_to 'Show', seance_laboratoire %></td>
+        <td><%= link_to 'Edit', edit_seance_laboratoire_path(seance_laboratoire) %></td>
+        <td><%= link_to 'Destroy', seance_laboratoire, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Seance laboratoire', new_seance_laboratoire_path %>

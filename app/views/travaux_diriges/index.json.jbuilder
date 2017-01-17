@@ -1,0 +1,1 @@
+json.array! @travaux_diriges, partial: 'travaux_diriges/travaux_dirige', as: :travaux_dirige

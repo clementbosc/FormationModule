@@ -1,0 +1,1 @@
+json.partial! "travaux_diriges/travaux_dirige", travaux_dirige: @travaux_dirige

@@ -1,0 +1,1 @@
+json.array! @seance_laboratoires, partial: 'seance_laboratoires/seance_laboratoire', as: :seance_laboratoire
