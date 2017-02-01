@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170117101016) do
+ActiveRecord::Schema.define(version: 20170118133241) do
 
   create_table "devoirs", force: :cascade do |t|
     t.string   "name"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20170117101016) do
     t.integer  "user_id"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+    t.float    "note"
   end
 
   add_index "interrogations", ["travaux_dirige_id"], name: "index_interrogations_on_travaux_dirige_id"
