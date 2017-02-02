@@ -11,3 +11,9 @@ doit faire ses propres recherches pour trouver la librairie qu'il ou elle trouve
 nouvelle). 
 
 Bon travail !
+
+# Ajout d'une documentation
+
+En théorie, il n'est pas nécessaire d'écrire de nouvelles tables 
+ou de modifier en profondeur l'application. Cependant, une documentation
+courte sur l'utilisation de Rails a été ajoutée dans le répertoire doc.

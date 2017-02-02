@@ -1,0 +1,209 @@
+\documentclass{article}
+
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+
+\title{Tutoriel Rails}
+\author{L3 Informatique---Sécurité Informatique}
+\date{Université Paul Sabatier Toulouse 3}
+
+\lstset{language=bash}
+\begin{document}
+
+\maketitle
+
+\section{Déploiement}
+
+\begin{description}
+\item[Ajout de librairies:] ~\\
+  \begin{enumerate}
+  \item éditer le fichier Gemfile pour ajouter la librairie (la ligne à ajouter est de la forme:
+    \begin{lstlisting}
+      gem 'librairie'
+    \end{lstlisting}
+  \item sauvegarder, et télécharger la librairie:
+    \begin{lstlisting}
+      bundle install
+    \end{lstlisting}
+  \end{enumerate}
+\item[Lancement du serveur Web:]  ~\\
+    \begin{lstlisting}
+      rails s
+    \end{lstlisting}
+\item[Lancement d'une console:]  ~\\
+    \begin{lstlisting}
+      rails c
+    \end{lstlisting}
+\end{description}
+
+
+\section{Interaction avec la base de données}
+
+La base de données actuelle est décrite dans le fichier
+\texttt{db/schema.rb}.  Ce fichier ne doit pas être édité
+manuellement. Lorsqu'on veut changer cette base, il faut créer une
+nouvelle \emph{migration} qui décrit les changements à faire, et
+ensuite appliquer cette migration. On peut revenir en arrière avec:
+\begin{lstlisting}
+  rake db:rollback
+\end{lstlisting}
+
+Les principales commandes sont:
+\begin{description}
+\item[Création:] ~\\
+  \begin{lstlisting}
+    rake db:migrate
+  \end{lstlisting}
+\item[Changement dans les tables existantes:] ~\\
+  \begin{enumerate}
+  \item Un changement s'appelle une \emph{migration}. On crée une
+    nouvelle migration vide avec:
+    \begin{lstlisting}
+      rails g migration nom_migration
+    \end{lstlisting}
+    Dans certains cas (ajout d'une colonne), la migration peut être générée depuis
+    la ligne de commande. Par exemple, pour ajouter une colonne \texttt{age} de type \texttt{int}
+    à la table \texttt{users}, on peut utiliser:
+    \begin{lstlisting}
+      rails g migration add_age_to_users age:int
+    \end{lstlisting}
+  \item Mettre à jour la base de données:
+    \begin{lstlisting}
+      rake db:migrate
+    \end{lstlisting}
+    \end{enumerate}
+\end{description}
+Les migrations permettent aussi de créer de nouvelles tables, mais en
+général ces tables sont liées à des \textbf{modèles}, et seront créées automatiquement lors de la création du modèle. Il faudra cependant toujours faire la mise à jour avec:
+    \begin{lstlisting}
+      rake db:migrate
+    \end{lstlisting}
+ 
+
+\section{Modèles et scaffold}
+
+\subsection{Modèles}
+
+Un modèle est défini par une classe. Par convention, le modèle
+\texttt{User} est défini par le fichier \texttt{user.rb} dans le
+répertoire \texttt{app/models}. 
+
+\begin{description}
+\item[Création d'un nouveau modèle:] La commande:\\
+  \begin{lstlisting}
+    rails g model shoe  user:references size:int:index couleur:string
+  \end{lstlisting}
+  crée un nouveau modèle \texttt{Shoe}. Dans la base de données,
+  chaque enregistrement contiendra une clef étrangère
+  (\texttt{references}) venant de la table \texttt{users}, une valeur
+  \texttt{size} de type \texttt{int} avec un index sur cette colonne
+  (pour pouvoir récupérer rapidement les chaussures d'une taille
+  donnée), et enfin une chaîne de caractères qui en décrit la couleur.
+  Plus précisément, cette commande a créé la migration qui va créer cette table,
+  et il faut maintenant appliquer cette migration:
+  \begin{lstlisting}
+    rake db:migrate
+  \end{lstlisting}
+\item[Utilisation des relations de la BD dans l'application:] 
+  \begin{itemize}
+  \item si l'enregistrement contient une référence, on utilise une
+    relation \texttt{belongs\_to} pour accéder à l'enregistrement
+    référencé:
+    \begin{lstlisting}[language=ruby]
+class Shoe < ActiveRecord::Base
+  belongs_to :user
+end
+    \end{lstlisting}
+  \item Si un utilisateur peut avoir une seule chaussure, on écrira
+    dans \texttt{app/models/user.rb}:
+    \begin{lstlisting}[language=ruby]
+class User < ActiveRecord::Base
+  has_one :shoe
+end
+    \end{lstlisting}
+et si un utilisateur peut en avoir plusieurs, on écrira plutôt:
+    \begin{lstlisting}[language=ruby]
+class User < ActiveRecord::Base
+  has_many :shoes
+end
+    \end{lstlisting}
+    (notez le passage du singulier au pluriel).
+  \end{itemize}
+\item[Création d'un enregistrement:] 
+  \begin{enumerate}
+  \item ouvrir la console:
+    \begin{lstlisting}
+      rails c
+    \end{lstlisting}
+  \item créer la nouvelle instance:
+    \begin{lstlisting}[language=ruby]
+chaussure=Shoe.new({user: User.first, size: 36, couleur: 'rouge'})
+    \end{lstlisting} 
+    (User.first est le premier enregistrement trouvé dans la table
+    \texttt{users})
+  \item sauvegarder cette instance:
+    \begin{lstlisting}[language=ruby]
+chaussure.save
+    \end{lstlisting} 
+    on aussi peut le faire en une seule étape:
+    \begin{lstlisting}[language=ruby]
+      Shoe.create({user: User.first, size: 36, couleur: 'rouge'})
+    \end{lstlisting}
+  \end{enumerate}
+\item[Retrouver des modèles:] On fait une recherche sur les modèles en
+  utilisant \texttt{where}. Par exemple (console rails):
+  \begin{lstlisting}[language=ruby]
+    taille36=Shoes.where({size: 36}) 
+  \end{lstlisting}
+  (\texttt{where} rend un tableau possiblement vide). 
+\end{description}
+
+\subsection{Scaffold}
+
+Dans l'énoncé du TP, les tables correspondant uniquement à des modèles
+sont en rouge. Celles qui sont en bleues peuvent être manipulées
+(ajout/suppression d'enregistrement, visualisation, édition) à travers
+l'interface Web.
+\begin{description}
+\item[Contrôleur:] un contrôleur contient des méthodes à exécuter. Par
+  défaut, ce sont les méthodes ReST: show, new (formulaire de
+  création), create (création), edit (formulaire de modification),
+  update (modification), index, et destroy. Par convention, pour le
+  modèle \texttt{Shoe}, le contrôleur est
+  \texttt{app/controllers/shoes\_controller.rb}.
+\item[Routage:] le fichier \texttt{config/routes.rb} contient la
+  liste des actions à faire lors de la réception d'une requête HTTP. Par défaut,
+la déclaration:
+\begin{lstlisting}[language=ruby]
+ resources :shoes
+\end{lstlisting}
+va créer 7 couples (url+verbe http) qui seront traduites en appels de
+méthode dans le contrôleur (par exemple, le couple \(('/shoes',get)\)
+va conduire à appeler la méthode \texttt{index} du contrôleur
+\texttt{shoes\_controller.rb}.
+\item[Vues:] les méthodes du contrôleur assignent des variables
+  globales (dont le nom commence par @) qui sont ensuite utilisées
+  pour construire la réponse. Pour chaque méthode par défaut, la
+  réponse est construite à partir d'un des fichiers du répertoire
+  \texttt{app/views/shoes/}. Les fichiers\texttt{.html.erb} mêlent de l'html
+  et du ruby de 2 manières:
+  \begin{itemize}
+  \item lorsque le résultat de l'évaluation du code ruby doit être inséré, on utilise la balise
+    \verb+<%=+;
+  \item sinon, on utilise la balise \verb+<%+;
+  \end{itemize}
+\end{description}
+
+Tous ces fichiers sont générés automatiquement si, au lieu d'utiliser:
+\begin{lstlisting}
+  rails g model shoe  user:references size:int:index couleur:string
+\end{lstlisting}
+on utilise:
+\begin{lstlisting}
+  rails g scaffold shoe  user:references size:int:index couleur:string
+\end{lstlisting}
+Notez que dans ce cas, comme on modifie la configuration (le fichier
+\texttt{config/routes.rb}), il faut relancer le serveur.
+\end{document}
