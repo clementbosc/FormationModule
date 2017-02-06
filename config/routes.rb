@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   resources :seance_laboratoires
   resources :travaux_diriges
-  resources :devoirs
+  resources :devoirs do
+    resources:note_devoirs
+  end
   resources :users
   resources :groups
   # The priority is based upon order of creation: first created -> highest priority.

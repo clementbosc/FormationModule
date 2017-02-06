@@ -4,6 +4,44 @@
   <strong>Name:</strong>
   <%= @devoir.name %>
 </p>
+<h2>Notes</h2>
+
+<table>
+    <% form_for @devoir do |f| %>
+  <thead>
+    <tr>
+      <th>Prénom</th>
+      <th>Nom</th>
+      <th>Numéro</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Prénom</td>
+      <td>Nom</td>
+      <td>Numéro</td>
+      <td>Notes</td>
+    </tr>
+      <% User.all.each do |u| %>
+	<tr>
+	  <% f.fields_for(:note_devoirs) do |fnd| %>
+	    <td><%= u.firstname %></td>
+	    <td><%= u.lastname %></td>
+	    <td><%= u.numero %></td>
+	    <td><%= fnd.text_field :note %>
+	      <% fnd.hidden_field "devoir_id", @devoir.id %></td>
+	      <% fnd.hidden_field "user_id", u.id %></td>
+	</tr>
+	  <%end %>
+      <% end %>
+  </tbody>
+  <tfoot>
+    <tr><td clospan="3"><%= f.submit "sauver" %></td></tr>
+  </tfoot>
+      <% end %>
+</table>
+<td>
 
 <%= link_to 'Edit', edit_devoir_path(@devoir) %> |
 <%= link_to 'Back', devoirs_path %>

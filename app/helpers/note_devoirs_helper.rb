@@ -1,0 +1,2 @@
+module NoteDevoirsHelper
+end

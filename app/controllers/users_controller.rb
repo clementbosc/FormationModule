@@ -1,6 +1,13 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
+
+  def add_note_devoir
+    d=NoteDevoir.create(user_id: note_devoir_params[:id],
+			devoir_id: note_devoir_params[:user_id],
+			note: note_devoir_params[:note])
+  end
+
   # GET /users
   # GET /users.json
   def index
