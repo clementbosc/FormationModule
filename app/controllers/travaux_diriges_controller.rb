@@ -1,5 +1,17 @@
 class TravauxDirigesController < ApplicationController
-  before_action :set_travaux_dirige, only: [:show, :edit, :update, :destroy]
+  before_action :set_travaux_dirige, only: [:show, :edit, :update, :destroy,:ajoute_presents]
+
+
+  def ajoute_presents
+    p=note_interrogation_create_params
+    travaux_dirige_id=p[:id]
+    presents=p[:presents] || []
+    presents.each do |u_id|
+      d=Interrogation.create(user_id: u_id, travaux_dirige_id: travaux_dirige_id,	note: "")
+    end
+    redirect_to :back
+  end
+  
 
   # GET /travaux_diriges
   # GET /travaux_diriges.json
@@ -71,4 +83,9 @@ class TravauxDirigesController < ApplicationController
     def travaux_dirige_params
       params.require(:travaux_dirige).permit(:name, :number)
     end
+
+    def note_interrogation_create_params
+      params.require(:travaux_dirige).permit(:id, :presents => [])
+    end
+
 end
