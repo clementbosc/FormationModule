@@ -1,6 +1,18 @@
 class DevoirsController < ApplicationController
-  before_action :set_devoir, only: [:show, :edit, :update, :destroy]
+  before_action :set_devoir, only: [:show, :edit, :update, :destroy,:ajoute_presence]
 
+
+  def ajoute_presents
+    p=note_devoir_create_params
+    logger.debug p.inspect
+    devoir_id=p[:id]
+    presents=p[:presents] || []
+    presents.each do |u_id|
+      d=NoteDevoir.create(user_id: u_id, devoir_id: devoir_id,	note: "")
+    end
+    redirect_to :back
+  end
+  
   # GET /devoirs
   # GET /devoirs.json
   def index
@@ -70,5 +82,8 @@ class DevoirsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def devoir_params
       params.require(:devoir).permit(:name)
+    end
+    def note_devoir_create_params
+      params.require(:devoir).permit(:id, :presents => [])
     end
 end

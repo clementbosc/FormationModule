@@ -5,9 +5,7 @@
   <%= @devoir.name %>
 </p>
 <h2>Notes</h2>
-
 <table>
-    <% form_for @devoir do |f| %>
   <thead>
     <tr>
       <th>Prénom</th>
@@ -17,31 +15,63 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>Prénom</td>
-      <td>Nom</td>
-      <td>Numéro</td>
-      <td>Notes</td>
-    </tr>
-      <% User.all.each do |u| %>
+    <% presents = []  %>
+    <% @devoir.note_devoirs.each do |note_devoir| %>
+      <% presents << note_devoir.user_id %>
 	<tr>
-	  <% f.fields_for(:note_devoirs) do |fnd| %>
-	    <td><%= u.firstname %></td>
-	    <td><%= u.lastname %></td>
-	    <td><%= u.numero %></td>
-	    <td><%= fnd.text_field :note %>
-	      <% fnd.hidden_field "devoir_id", @devoir.id %></td>
-	      <% fnd.hidden_field "user_id", u.id %></td>
+	  <td><%= note_devoir.user.firstname %></td>
+	  <td><%= note_devoir.user.lastname %></td>
+	  <td><%= note_devoir.user.numero || "sans numéro"%></td>
+	  <% if note_devoir.note.blank? then %>
+	    <td>
+	      <%= form_for note_devoir,  remote: true do |f| %>
+		<%=  f.text_field :note %>
+		<%= f.submit "ok" %>
+	      <% end %>
+	    </td>
+	    <% else %>
+	    <td><%=  note_devoir.note %></td>
+	      <% end %>
 	</tr>
-	  <%end %>
       <% end %>
   </tbody>
   <tfoot>
-    <tr><td clospan="3"><%= f.submit "sauver" %></td></tr>
+    <tr><td colspan="4">flkfdfjk</td></tr>
   </tfoot>
-      <% end %>
 </table>
-<td>
+
+<h2> Présence</h2>
+
+<%= form_tag controller: "devoirs", action: :ajoute_presents, method: "post"  do %>
+  <%= hidden_field_tag "devoir[id]", @devoir.id.to_s %>
+<table>
+  <thead>
+    <tr>
+      <th>Prénom</th>
+      <th>Nom</th>
+      <th>Numéro</th>
+      <th>Présence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% User.all.each do |u| %>
+      <% unless presents.include? u.id %>
+      <tr>
+	  <td><%= u.firstname %></td>
+	  <td><%= u.lastname %></td>
+	  <td><%= u.numero %></td>
+	  <td>
+	    <input type="checkbox" name="devoir[presents][]" value="<%= u.id %>">
+	  </td>
+      </tr>
+	<% end %>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr><td colspan="4"><%= submit_tag  %></td></tr>
+  </tfoot>
+</table>
+<% end %>
 
 <%= link_to 'Edit', edit_devoir_path(@devoir) %> |
 <%= link_to 'Back', devoirs_path %>

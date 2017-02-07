@@ -1,11 +1,13 @@
 Rails.application.routes.draw do
   resources :seance_laboratoires
   resources :travaux_diriges
-  resources :devoirs do
-    resources:note_devoirs
-  end
+  resources :devoirs 
+  resources :note_devoirs, only: [:update,:create]
   resources :users
   resources :groups
+  
+  post 'devoirs/ajoute_presents' => "devoirs#ajoute_presents"
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

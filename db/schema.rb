@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170118133241) do
+ActiveRecord::Schema.define(version: 20170206175837) do
 
   create_table "devoirs", force: :cascade do |t|
     t.string   "name"
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 20170118133241) do
     t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "note"
   end
 
   add_index "note_devoirs", ["devoir_id"], name: "index_note_devoirs_on_devoir_id"
