@@ -9,6 +9,67 @@
   <strong>Number:</strong>
   <%= @seance_laboratoire.number %>
 </p>
+Numéro</th>
+
+<h2>Présents</h2>
+
+ <table>
+  <thead>
+    <tr>
+      <th>Prénom</th>
+      <th>Nom</th>
+      <th>Numéro</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% presents = []  %>
+    <% @seance_laboratoire.participations.each do |participation| %>
+      <% presents << participation.user_id %>
+	<tr>
+	  <td><%= participation.user.firstname %></td>
+	  <td><%= participation.user.lastname %></td>
+	  <td><%= participation.user.numero || "sans numéro"%></td>
+	</tr>
+      <% end %>
+  </tbody>
+  <tfoot>
+    <tr><td colspan="4">flkfdfjk</td></tr>
+  </tfoot>
+</table>
+
+<h2> Absents</h2>
+
+<%= form_tag controller: "seance_laboratoires", action: :ajoute_presents, method: "post"  do %>
+  <%= hidden_field_tag "seance_laboratoire[id]", @seance_laboratoire.id.to_s %>
+  <%= hidden_field_tag "id", @seance_laboratoire.id.to_s %>
+<table>
+  <thead>
+    <tr>
+      <th>Prénom</th>
+      <th>Nom</th>
+      <th>Numéro</th>
+      <th>Présent ?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% User.all.each do |u| %>
+      <% unless presents.include? u.id %>
+      <tr>
+	  <td><%= u.firstname %></td>
+	  <td><%= u.lastname %></td>
+	  <td><%= u.numero %></td>
+	  <td>
+	    <input type="checkbox" name="seance_laboratoire[presents][]" value="<%= u.id %>">
+	  </td>
+      </tr>
+	<% end %>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr><td colspan="4"><%= submit_tag  %></td></tr>
+  </tfoot>
+</table>
+<% end %>
 
 <%= link_to 'Edit', edit_seance_laboratoire_path(@seance_laboratoire) %> |
 <%= link_to 'Back', seance_laboratoires_path %>

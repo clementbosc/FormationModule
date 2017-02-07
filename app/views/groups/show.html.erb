@@ -5,5 +5,48 @@
   <%= @group.name %>
 </p>
 
-<%= link_to 'Edit', edit_group_path(@group) %> |
+<p>
+  <% if @group.lab_teacher.nil? %>
+    <%= form_tag controller: "groups", action: :ajoute_lab_teacher, method: "post"  do%>
+      <%= hidden_field_tag "group[id]"  , @group.id %>
+      <%= select_tag "group[user_id]",options_from_collection_for_select(User.all,"id","name"), prompt: "Sélectionnez un enseignant de TP" %>
+      <%= submit_tag "ok" %>
+      <% end %>
+<% else %>
+  Enseignant TP:<%=  @group.lab_teacher.user.name %>
+  <% end %>
+</p>
+
+
+<p>
+  <% if @group.theory_teacher.nil? %>
+    <%= form_tag controller: "groups", action: :ajoute_theory_teacher, method: "post"  do%>
+      <%= hidden_field_tag "group[id]"  , @group.id %>
+      <%= select_tag "group[user_id]",options_from_collection_for_select(User.all,"id","name"), prompt: "Sélectionnez un enseignant de TD" %>
+      <%= submit_tag "ok" %>
+      <% end %>
+<% else %>
+  Enseignant TD:<%=  @group.theory_teacher.user.name %>
+  <% end %>
+</p>
+
+
+<h2>Étudiants enregistrés</h2>
+<ul>
+  <% etudiants=[] %>
+  <% @group.members.each do |m| %>
+    <li><%= link_to m.user.name, m.user %></li>
+    <% etudiants << m.user.id  %>
+    <% end %>
+</ul>
+
+<p>
+    <%= form_tag controller: "groups", action: :ajoute_etudiants, method: "post"  do%>
+      <%= hidden_field_tag "group[id]"  , @group.id %>
+      <%= select_tag "group[user_ids]",options_from_collection_for_select(User.all.select do |u| u.member.nil?  end,"id","name"), prompt: "Sélectionnez les étudiants", multiple: true %>
+      <%= submit_tag "ok" %>
+      <% end %>
+</p>
+
+  <%= link_to 'Edit', edit_group_path(@group) %> |
 <%= link_to 'Back', groups_path %>

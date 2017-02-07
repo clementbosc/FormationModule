@@ -1,6 +1,23 @@
 class GroupsController < ApplicationController
   before_action :set_group, only: [:show, :edit, :update, :destroy]
 
+  def ajoute_lab_teacher
+    LabTeacher.create(group_id: teacher_params[:id], user_id: teacher_params[:user_id])
+    redirect_to :back
+  end
+  
+  def ajoute_theory_teacher
+    TheoryTeacher.create(group_id: teacher_params[:id], user_id: teacher_params[:user_id])
+    redirect_to :back
+  end
+  def ajoute_etudiants
+    group_id= students_params[:id]
+    students_params[:user_ids].each do |user_id|
+      Member.create(group_id: group_id, user_id: user_id)
+    end
+    redirect_to :back
+  end
+  
   # GET /groups
   # GET /groups.json
   def index
@@ -70,5 +87,12 @@ class GroupsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def group_params
       params.require(:group).permit(:name)
+    end
+
+    def teacher_params
+      params.require(:group).permit(:id,:user_id)
+    end
+    def students_params
+      params.require(:group).permit(:id,:user_ids => [] )
     end
 end

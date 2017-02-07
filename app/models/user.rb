@@ -11,7 +11,9 @@ class User < ActiveRecord::Base
   has_many :participation_tps, :through => :participations, class_name: "SeanceLaboratoire"
   has_many :participation_tds, :through => :interrogations, class_name: "TravauxDirige"
 
-
+  def name
+    "#{firstname} #{lastname}"
+  end
 
   def groupe_td
     nil if member.nil?

@@ -1,5 +1,16 @@
 class SeanceLaboratoiresController < ApplicationController
-  before_action :set_seance_laboratoire, only: [:show, :edit, :update, :destroy]
+  before_action :set_seance_laboratoire, only: [:show, :edit, :update, :destroy,:ajoute_presents]
+
+
+    def ajoute_presents
+    p=participation_create_params
+    seance_laboratoire_id=p[:id]
+    presents=p[:presents] || []
+    presents.each do |u_id|
+      d=Participation.create(user_id: u_id, seance_laboratoire_id: seance_laboratoire_id)
+    end
+    redirect_to :back
+  end
 
   # GET /seance_laboratoires
   # GET /seance_laboratoires.json
@@ -70,5 +81,9 @@ class SeanceLaboratoiresController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def seance_laboratoire_params
       params.require(:seance_laboratoire).permit(:name, :number)
+    end
+
+    def participation_create_params
+      params.require(:seance_laboratoire).permit(:id, :presents => [])
     end
 end
