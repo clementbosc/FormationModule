@@ -15,6 +15,9 @@ Rails.application.routes.draw do
   post 'groups/ajoute_theory_teacher' => "groups#ajoute_theory_teacher"
   post 'groups/ajoute_etudiants' => "groups#ajoute_etudiants"
 
+  root to: 'users#index'
+
+
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
