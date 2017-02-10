@@ -10,13 +10,17 @@
 Devoir.create(name: "CC" )
 Devoir.create(name: "CT" )
 
-User.create(firstname: "John", lastname: "Lennon", email: "jl@beattles.org", numero: "num1")
+i=2017
+CSV.foreach("db/users.csv") do |nom,prenom,role|
+  newuser = User.new({ firstname: prenom, lastname: nom, numero: "TA#{i}",
+                       email: "#{prenom}.#{nom}@univ-tlse3.fr", password: prenom, password_confirmation: prenom, role: role.to_sym
+                     })
+  # comme les mots de passe sont faibles
+  newuser.skip_confirmation!
+  newuser.save
+  i = i + 1
+end
 
-User.create(firstname: "John", lastname: "Steed", email: "js@avengers.org", numero: "num2")
-
-User.create(firstname: "John", lastname: "Runner", email: "jr@scots.org", numero: "num3")
-
-User.create(firstname: "John", lastname: "English", email: "je@beettle.org", numero: "num4")
 
 Group.create(name: "A1.1")
 Group.create(name: "A1.2")
