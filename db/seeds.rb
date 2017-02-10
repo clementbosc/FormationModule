@@ -14,6 +14,7 @@ i=2017
 CSV.foreach("db/users.csv") do |nom,prenom,role|
   break if nom.nil?
   p "#{prenom},#{nom},#{role}"
+  role ="visiteur" if role.nil?
   newuser = User.new({ firstname: prenom, lastname: nom,
                        numero: "TA#{i}",
                        email: "#{prenom}.#{nom}@univ-tlse3.fr",
