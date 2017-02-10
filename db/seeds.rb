@@ -5,19 +5,22 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-
+require 'csv'
 
 Devoir.create(name: "CC" )
 Devoir.create(name: "CT" )
 
 i=2017
 CSV.foreach("db/users.csv") do |nom,prenom,role|
-  newuser = User.new({ firstname: prenom, lastname: nom, numero: "TA#{i}",
-                       email: "#{prenom}.#{nom}@univ-tlse3.fr", password: prenom, password_confirmation: prenom, role: role.to_sym
-                     })
+  break if nom.nil?
+  p "#{prenom},#{nom},#{role}"
+  newuser = User.new({ firstname: prenom, lastname: nom,
+                       numero: "TA#{i}",
+                       email: "#{prenom}.#{nom}@univ-tlse3.fr",
+                       password: nom, password_confirmation: nom,
+                       role: role.to_sym })
   # comme les mots de passe sont faibles
-  newuser.skip_confirmation!
-  newuser.save
+  newuser.save(validate: false)
   i = i + 1
 end
 
