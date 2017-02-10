@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   resources :seance_laboratoires
   resources :travaux_diriges
   resources :devoirs 

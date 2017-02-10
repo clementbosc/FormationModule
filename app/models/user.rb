@@ -1,4 +1,8 @@
 class User < ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
   has_one :member
   has_one :group, through: :member
   has_one :theory_teacher
@@ -10,6 +14,7 @@ class User < ActiveRecord::Base
   has_many :participations
   has_many :participation_tps, :through => :participations, class_name: "SeanceLaboratoire"
   has_many :participation_tds, :through => :interrogations, class_name: "TravauxDirige"
+  enum role: [:visiteur, :etudiant, :professeur, :admin]
 
   def name
     "#{firstname} #{lastname}"
