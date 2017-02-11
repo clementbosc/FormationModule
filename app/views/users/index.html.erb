@@ -2,12 +2,12 @@
 
 <h1>Listing Users</h1>
 
-<table>
+<table class="table">
   <thead>
     <tr>
       <th>Firstname</th>
       <th>Lastname</th>
-      <!--<th>Email</th>-->
+      <th>Email</th>
       <th>Numero</th>
       <th colspan="3"></th>
     </tr>
@@ -18,7 +18,7 @@
       <tr>
         <td><%= user.firstname %></td>
         <td><%= user.lastname %></td>
-        <!--<td><%#= user.email %></td>-->
+        <td><%= user.email %></td>
         <td><%= user.numero %></td>
         <td><%= link_to 'Show', user %></td>
         <td><%= link_to 'Edit', edit_user_path(user) %></td>
@@ -30,4 +30,4 @@
 
 <br>
 
-<%= link_to 'New User', new_user_path %>
+<%= link_to 'New User', new_user_path, { :class => "btn btn-default" } %>

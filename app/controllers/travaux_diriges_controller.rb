@@ -3,11 +3,12 @@ class TravauxDirigesController < ApplicationController
 
 
   def ajoute_presents
+    authorize :interrogation, :create?
     p=note_interrogation_create_params
     travaux_dirige_id=p[:id]
     presents=p[:presents] || []
     presents.each do |u_id|
-      d=Interrogation.create(user_id: u_id, travaux_dirige_id: travaux_dirige_id,	note: "")
+      Interrogation.create(user_id: u_id, travaux_dirige_id: travaux_dirige_id,	note: "")
     end
     redirect_to :back
   end

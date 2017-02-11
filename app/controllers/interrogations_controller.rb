@@ -4,6 +4,7 @@ class InterrogationsController < ApplicationController
   
   def update
     @note_interrogation.note=note_params[:note]
+    authorize @note_interrogation
     @note_interrogation.save
     redirect_to :back
   end
