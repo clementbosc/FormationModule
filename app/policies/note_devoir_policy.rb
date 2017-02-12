@@ -1,5 +1,5 @@
-class InterrogationPolicy < ApplicationPolicy
-  attr_reader :user, :interrogation
+class NoteDevoirPolicy < ApplicationPolicy
+  attr_reader :user, :note_devoir
 
   class Scope < Scope
     def resolve
@@ -18,9 +18,9 @@ class InterrogationPolicy < ApplicationPolicy
   end
 
 
-  def initialize(user, interrogation)
+  def initialize(user, note_devoir)
     @user = user
-    @interrogation = interrogation
+    @note_devoir = note_devoir
   end
 
   def update?
@@ -32,7 +32,7 @@ class InterrogationPolicy < ApplicationPolicy
   end
 
   def show?
-    @user && ( @user.professeur? || @user == @interrogation.user )
+    @user && ( @user.professeur? || @user == @note_devoir.user )
   end
 
   def create?

@@ -4,6 +4,7 @@ class NoteDevoirsController < ApplicationController
   
   def update
     @note_devoir.note=note_params[:note]
+    authorize @note_devoir
     @note_devoir.save
     redirect_to :back
   end

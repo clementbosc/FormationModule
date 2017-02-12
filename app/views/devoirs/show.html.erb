@@ -5,7 +5,7 @@
   <%= @devoir.name %>
 </p>
 <h2>Notes</h2>
-<table>
+<table class="table">
   <thead>
     <tr>
       <th>Prénom</th>
@@ -24,10 +24,12 @@
 	  <td><%= note_devoir.user.numero || "sans numéro"%></td>
 	  <% if note_devoir.note.blank? then %>
 	    <td>
-	      <%= form_for note_devoir,  remote: true do |f| %>
-		<%=  f.text_field :note %>
-		<%= f.submit "ok" %>
-	      <% end %>
+        <% if policy(note_devoir).edit? %>
+          <%= form_for note_devoir,  remote: true do |f| %>
+            <%=  f.text_field :note %>
+            <%= f.submit "ok" %>
+          <% end %>
+        <% end %>
 	    </td>
 	    <% else %>
 	    <td><%=  note_devoir.note %></td>
@@ -35,42 +37,45 @@
 	</tr>
       <% end %>
   </tbody>
-  <tfoot>
-    <tr><td colspan="4">flkfdfjk</td></tr>
-  </tfoot>
 </table>
 
-<h2> Présence</h2>
+<% if policy(:note_devoir).create? || policy(:note_devoir).index? %>
+  <h2> Présence</h2>
 
-<%= form_tag controller: "devoirs", action: :ajoute_presents, method: "post"  do %>
-  <%= hidden_field_tag "devoir[id]", @devoir.id.to_s %>
-<table>
-  <thead>
-    <tr>
-      <th>Prénom</th>
-      <th>Nom</th>
-      <th>Numéro</th>
-      <th>Présence</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% User.all.each do |u| %>
-      <% unless presents.include? u.id %>
+  <%= form_tag controller: "devoirs", action: :ajoute_presents, method: "post"  do %>
+    <%= hidden_field_tag "devoir[id]", @devoir.id.to_s %>
+  <table class="table">
+    <thead>
       <tr>
-	  <td><%= u.firstname %></td>
-	  <td><%= u.lastname %></td>
-	  <td><%= u.numero %></td>
-	  <td>
-	    <input type="checkbox" name="devoir[presents][]" value="<%= u.id %>">
-	  </td>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Numéro</th>
+        <th>Présence</th>
       </tr>
-	<% end %>
+    </thead>
+    <tbody>
+      <% User.all.each do |u| %>
+        <% unless presents.include? u.id %>
+        <tr>
+      <td><%= u.firstname %></td>
+      <td><%= u.lastname %></td>
+      <td><%= u.numero %></td>
+      <td>
+        <% if policy(:note_devoir).create? %>
+          <input type="checkbox" name="devoir[presents][]" value="<%= u.id %>">
+        <% end %>
+      </td>
+        </tr>
     <% end %>
-  </tbody>
-  <tfoot>
-    <tr><td colspan="4"><%= submit_tag  %></td></tr>
-  </tfoot>
-</table>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <% if policy(:note_devoir).create? %>
+        <tr><td colspan="4"><%= submit_tag  %></td></tr>
+      <% end %>
+    </tfoot>
+  </table>
+  <% end %>
 <% end %>
 
 <%= link_to 'Edit', edit_devoir_path(@devoir) %> |

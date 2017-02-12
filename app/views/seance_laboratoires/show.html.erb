@@ -13,7 +13,7 @@ Numéro</th>
 
 <h2>Présents</h2>
 
- <table>
+ <table class="table">
   <thead>
     <tr>
       <th>Prénom</th>
@@ -32,9 +32,6 @@ Numéro</th>
 	</tr>
       <% end %>
   </tbody>
-  <tfoot>
-    <tr><td colspan="4">flkfdfjk</td></tr>
-  </tfoot>
 </table>
 
 <h2> Absents</h2>
@@ -42,7 +39,7 @@ Numéro</th>
 <%= form_tag controller: "seance_laboratoires", action: :ajoute_presents, method: "post"  do %>
   <%= hidden_field_tag "seance_laboratoire[id]", @seance_laboratoire.id.to_s %>
   <%= hidden_field_tag "id", @seance_laboratoire.id.to_s %>
-<table>
+<table class="table">
   <thead>
     <tr>
       <th>Prénom</th>

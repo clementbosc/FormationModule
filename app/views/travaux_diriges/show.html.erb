@@ -1,7 +1,5 @@
 <p id="notice"><%= notice %></p>
 
-<p><%= current_user.role %></p>
-
 <p>
   <strong>Name:</strong>
   <%= @travaux_dirige.name %>
@@ -11,82 +9,82 @@
   <strong>Number:</strong>
   <%= @travaux_dirige.number %>
 </p>
+
 <h2>Notes</h2>
-<table>
+<table class="table">
   <thead>
-    <tr>
-      <th>Prénom</th>
-      <th>Nom</th>
-      <th>Numéro</th>
-      <th>Note</th>
-    </tr>
+  <tr>
+    <th>Prénom</th>
+    <th>Nom</th>
+    <th>Numéro</th>
+    <th>Note</th>
+  </tr>
   </thead>
   <tbody>
-    <% presents = []  %>
-    <% @travaux_dirige.interrogations.each do |interrogation| %>
+  <% presents = [] %>
+  <% @travaux_dirige.interrogations.each do |interrogation| %>
       <% presents << interrogation.user_id %>
       <tr>
         <td><%= interrogation.user.firstname %></td>
         <td><%= interrogation.user.lastname %></td>
-        <td><%= interrogation.user.numero || "sans numéro"%></td>
+        <td><%= interrogation.user.numero || "sans numéro" %></td>
         <% if interrogation.note.blank? %>
-          <td>
-            <% if policy(interrogation).edit? %>
-              <%= form_for interrogation,  remote: true do |f| %>
-                <%=  f.text_field :note %>
-                <%= f.submit "ok" %>
+            <td>
+              <% if policy(interrogation).edit? %>
+                  <%= form_for interrogation, remote: true do |f| %>
+                      <%= f.text_field :note %>
+                      <%= f.submit "ok" %>
+                  <% end %>
               <% end %>
-            <% end %>
-          </td>
-          <% else %>
-          <td><%=  interrogation.note %></td>
+            </td>
+        <% else %>
+            <td><%= interrogation.note %></td>
         <% end %>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
-  <!--<tfoot>
-    <tr><td colspan="4">flkfdfjk</td></tr>
-  </tfoot>-->
 </table>
 
 <% if policy(:interrogation).create? || policy(:interrogation).index? %>
-  <h2> Présence</h2>
+    <h2> Présence</h2>
 
-  <%= form_tag controller: "travaux_diriges", action: :ajoute_presents, method: "post"  do %>
-    <%= hidden_field_tag "travaux_dirige[id]", @travaux_dirige.id.to_s %>
-    <%= hidden_field_tag "id", @travaux_dirige.id.to_s %>
-  <table>
-    <thead>
-      <tr>
-        <th>Prénom</th>
-        <th>Nom</th>
-        <th>Numéro</th>
-        <th>Présence</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% User.all.each do |u| %>
-        <% unless presents.include? u.id %>
-        <tr>
-      <td><%= u.firstname %></td>
-      <td><%= u.lastname %></td>
-      <td><%= u.numero %></td>
-      <td>
-        <% if policy(:interrogation ).create? %>
-          <input type="checkbox" name="travaux_dirige[presents][]" value="<%= u.id %>">
-        <% end %>
-      </td>
-        </tr>
+    <%= form_tag controller: "travaux_diriges", action: :ajoute_presents, method: "post" do %>
+        <%= hidden_field_tag "travaux_dirige[id]", @travaux_dirige.id.to_s %>
+        <%= hidden_field_tag "id", @travaux_dirige.id.to_s %>
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Numéro</th>
+            <th>Présence</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% User.all.each do |u| %>
+              <% unless presents.include? u.id %>
+                  <tr>
+                    <td><%= u.firstname %></td>
+                    <td><%= u.lastname %></td>
+                    <td><%= u.numero %></td>
+                    <td>
+                      <% if policy(:interrogation).create? %>
+                          <input type="checkbox" name="travaux_dirige[presents][]" value="<%= u.id %>">
+                      <% end %>
+                    </td>
+                  </tr>
+              <% end %>
+          <% end %>
+          </tbody>
+          <tfoot>
+          <% if policy(:interrogation).create? %>
+              <tr>
+                <td colspan="4"><%= submit_tag %></td>
+              </tr>
+          <% end %>
+          </tfoot>
+        </table>
     <% end %>
-      <% end %>
-    </tbody>
-    <tfoot>
-      <% if policy (:interrogation).create? %>
-        <tr><td colspan="4"><%= submit_tag  %></td></tr>
-      <% end %>
-    </tfoot>
-  </table>
-  <% end %>
 <% end %>
 
 <%= link_to 'Edit', edit_travaux_dirige_path(@travaux_dirige) %> |
